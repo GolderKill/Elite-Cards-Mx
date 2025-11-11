@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - TCG Collector's Haven</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎴 TCG Collector's Haven</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Inicio</a>
+                <a href="tienda.html" class="nav-link">Tienda</a>
+                <a href="subastas.html" class="nav-link">Subastas</a>
+                <a href="#" class="nav-link" id="auth-link">Mi Cuenta</a>
+                <a href="#" class="nav-link cart" id="cart-link">🛒 Carrito (<span id="cart-count">0</span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Filtros de Tienda -->
+    <section class="filtros">
+        <div class="container">
+            <h2>Nuestra Tienda de Cartas</h2>
+            <div class="filtros-container">
+                <select id="categoria-filter" class="filter-select">
+                    <option value="all">Todas las Categorías</option>
+                    <option value="pokemon">Pokémon</option>
+                    <option value="magic">Magic: The Gathering</option>
+                    <option value="yugioh">Yu-Gi-Oh!</option>
+                </select>
+                <select id="precio-filter" class="filter-select">
+                    <option value="all">Todos los Precios</option>
+                    <option value="0-50">$0 - $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100+">$100+</option>
+                </select>
+                <input type="text" id="search" class="search-input" placeholder="Buscar cartas...">
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Productos -->
+<section class="productos">
+    <div class="container">
+        <div class="productos-grid" id="productos-grid">
+            <!-- Los productos se cargarán con JavaScript -->
+        </div>
+        
+        <!-- Loading y mensajes -->
+        <div id="productos-loading" style="text-align: center; padding: 2rem; display: none;">
+            <div class="loading"></div>
+            <p style="margin-top: 1rem; color: #666;">Cargando productos...</p>
+        </div>
+        
+        <div id="productos-empty" style="text-align: center; padding: 3rem; display: none;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">No se encontraron productos</h3>
+            <p style="color: #666; margin-bottom: 2rem;">Intenta con otros filtros o términos de búsqueda</p>
+            <button class="btn btn-primary" onclick="limpiarFiltros()">Limpiar Filtros</button>
+        </div>
+    </div>
+</section>
+
+    <!-- Modal del Carrito -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Tu Carrito de Compras</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <strong>Total: $<span id="cart-total">0</span></strong>
+            </div>
+            <button class="btn btn-primary" id="checkout-btn">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <!-- Modal de Login/Registro -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-auth">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
+                <button class="auth-tab" data-tab="register">Registrarse</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <h3>Iniciar Sesión</h3>
+                <form class="login-form-auth">
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <h3>Crear Cuenta</h3>
+                <form class="register-form-auth">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Perfil -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-profile">&times;</span>
+            <h2>Mi Perfil</h2>
+            <div class="profile-info">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-details">
+                        <h3 id="profile-name">Usuario</h3>
+                        <p id="profile-email">email@ejemplo.com</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-number" id="pujas-realizadas">0</span>
+                        <span class="stat-label">Pujas Realizadas</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="compras-realizadas">0</span>
+                        <span class="stat-label">Compras</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="subastas-ganadas">0</span>
+                        <span class="stat-label">Subastas Ganadas</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TCG Collector's Haven. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

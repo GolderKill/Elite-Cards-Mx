@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCG Collector's Haven - Tu tienda de cartas</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Nuevos estilos para la página principal mejorada */
+        
+        /* Hero Section Mejorada */
+        .hero-modern {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Secciones Destacadas */
+        .featured-section {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid Mejorado */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .featured-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Productos y Subastas Destacadas */
+        .products-showcase {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .showcase-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .showcase-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .showcase-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .showcase-content {
+            padding: 1.5rem;
+        }
+
+        .showcase-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .showcase-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .showcase-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .showcase-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .badge-popular {
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            padding: 5rem 0;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 2rem auto 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .newsletter-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        /* Footer Moderno */
+        .footer-modern {
+            background: #2c3e50;
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 2rem;
+            text-align: center;
+            color: #bdc3c7;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: #34495e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: #3498db;
+            transform: translateY(-2px);
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎴 TCG Collector's Haven</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Inicio</a>
+                <a href="tienda.html" class="nav-link">Tienda</a>
+                <a href="subastas.html" class="nav-link">Subastas</a>
+                <a href="#" class="nav-link" id="auth-link">Mi Cuenta</a>
+                <a href="#" class="nav-link cart" id="cart-link">🛒 Carrito (<span id="cart-count">0</span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section Mejorada -->
+    <section class="hero-modern">
+        <div class="container">
+            <div class="hero-content animate-fade-in">
+                <h1 class="hero-title">El Paraíso del Coleccionista</h1>
+                <p class="hero-subtitle">
+                    Descubre cartas TCG únicas, participa en subastas exclusivas y construye 
+                    la colección de tus sueños. Donde los coleccionistas encuentran tesoros.
+                </p>
+                <div class="hero-buttons">
+                    <a href="tienda.html" class="btn btn-primary">Explorar Tienda</a>
+                    <a href="subastas.html" class="btn btn-secondary">Ver Subastas</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características Destacadas -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header animate-fade-in">
+                <h2 class="section-title">Por qué elegirnos</h2>
+                <p class="section-subtitle">La plataforma definitiva para coleccionistas serios</p>
+            </div>
+            
+            <div class="featured-grid">
+                <div class="featured-card animate-fade-in">
+                    <span class="card-icon">🛡️</span>
+                    <h3 class="card-title">Autenticidad Garantizada</h3>
+                    <p class="card-description">
+                        Cada carta pasa por un riguroso proceso de verificación para garantizar 
+                        su autenticidad y condición. Colecciona con total confianza.
+                    </p>
+                </div>
+                
+                <div class="featured-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <span class="card-icon">⚡</span>
+                    <h3 class="card-title">Subastas en Vivo</h3>
+                    <p class="card-description">
+                        Participa en subastas emocionantes con tiempo real. Puja por cartas 
+                        raras y únicas que no encontrarás en ningún otro lugar.
+                    </p>
+                </div>
+                
+                <div class="featured-card animate-fade-in" style="animation-delay: 0.4s;">
+                    <span class="card-icon">🚚</span>
+                    <h3 class="card-title">Envío Seguro</h3>
+                    <p class="card-description">
+                        Embalaje profesional y envío seguro a todo el mundo. Tus cartas 
+                        llegan en perfectas condiciones, garantizado.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Más Populares -->
+    <section class="products-showcase">
+        <div class="container">
+            <div class="section-header animate-fade-in">
+                <h2 class="section-title">Productos Destacados</h2>
+                <p class="section-subtitle">Las cartas más buscadas por nuestros coleccionistas</p>
+            </div>
+            
+            <div class="showcase-grid" id="featured-products">
+                <!-- Los productos populares se cargarán con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Subastas Destacadas -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header animate-fade-in">
+                <h2 class="section-title">Subastas en Destacadas</h2>
+                <p class="section-subtitle">No te pierdas estas oportunidades únicas</p>
+            </div>
+            
+            <div class="showcase-grid" id="featured-auctions">
+                <!-- Las subastas destacadas se cargarán con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item animate-fade-in">
+                    <div class="stat-number" id="stats-users">1,500+</div>
+                    <div class="stat-label">Coleccionistas</div>
+                </div>
+                <div class="stat-item animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="stat-number" id="stats-products">500+</div>
+                    <div class="stat-label">Cartas Únicas</div>
+                </div>
+                <div class="stat-item animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="stat-number" id="stats-auctions">50+</div>
+                    <div class="stat-label">Subastas Activas</div>
+                </div>
+                <div class="stat-item animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="stat-number" id="stats-sold">10,000+</div>
+                    <div class="stat-label">Cartas Vendidas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="section-header animate-fade-in">
+                <h2 class="section-title">Mantente Informado</h2>
+                <p class="section-subtitle">Recibe notificaciones de nuevas subastas y productos exclusivos</p>
+            </div>
+            
+            <form class="newsletter-form animate-fade-in">
+                <input type="email" class="newsletter-input" placeholder="Tu correo electrónico" required>
+                <button type="submit" class="btn btn-primary">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Moderno -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>🎴 TCG Collector's Haven</h3>
+                    <p style="color: #bdc3c7; line-height: 1.6;">
+                        Tu destino premium para cartas TCG de colección. Autenticidad, 
+                        calidad y comunidad en un solo lugar.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Twitter">🐦</a>
+                        <a href="#" class="social-link" title="Instagram">📷</a>
+                        <a href="#" class="social-link" title="Facebook">👥</a>
+                        <a href="#" class="social-link" title="YouTube">📺</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">🏠 Inicio</a></li>
+                        <li><a href="tienda.html">🛒 Tienda</a></li>
+                        <li><a href="subastas.html">⚡ Subastas</a></li>
+                        <li><a href="#">📱 App Móvil</a></li>
+                        <li><a href="#">📚 Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Colecciones</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">🔥 Pokémon TCG</a></li>
+                        <li><a href="#">♠️ Magic: The Gathering</a></li>
+                        <li><a href="#">🐉 Yu-Gi-Oh!</a></li>
+                        <li><a href="#">🃏 Cartas Raras</a></li>
+                        <li><a href="#">🏆 Ediciones Especiales</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Soporte</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">❓ Centro de Ayuda</a></li>
+                        <li><a href="#">📞 Contacto</a></li>
+                        <li><a href="#">🚚 Envíos & Entregas</a></li>
+                        <li><a href="#">🛡️ Garantías</a></li>
+                        <li><a href="#">📝 Términos de Servicio</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 TCG Collector's Haven. Todos los derechos reservados.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    Hecho con ❤️ para la comunidad de coleccionistas
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modales -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-auth">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
+                <button class="auth-tab" data-tab="register">Registrarse</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <h3>Iniciar Sesión</h3>
+                <form class="login-form-auth">
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <h3>Crear Cuenta</h3>
+                <form class="register-form-auth">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-profile">&times;</span>
+            <h2>Mi Perfil</h2>
+            <div class="profile-info">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-details">
+                        <h3 id="profile-name">Usuario</h3>
+                        <p id="profile-email">email@ejemplo.com</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-number" id="pujas-realizadas">0</span>
+                        <span class="stat-label">Pujas Realizadas</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="compras-realizadas">0</span>
+                        <span class="stat-label">Compras</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="subastas-ganadas">0</span>
+                        <span class="stat-label">Subastas Ganadas</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Funcionalidad específica para la página principal
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarProductosDestacados();
+            cargarSubastasDestacadas();
+            actualizarEstadisticas();
+            setupNewsletter();
+            setupAnimations();
+        });
+
+        function cargarProductosDestacados() {
+            const productos = JSON.parse(localStorage.getItem('productos')) || [];
+            const container = document.getElementById('featured-products');
+            
+            // Tomar los primeros 6 productos o todos si hay menos
+            const productosDestacados = productos.slice(0, 6);
+            
+            if (productosDestacados.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+                        <h3>Próximamente productos destacados</h3>
+                        <p>Estamos preparando las mejores cartas para ti</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = productosDestacados.map(producto => `
+                <div class="showcase-item">
+                    <div class="showcase-image">
+                        ${producto.emoji || '🃏'}
+                    </div>
+                    <div class="showcase-content">
+                        <h3 class="showcase-title">${producto.nombre}</h3>
+                        <p class="showcase-description">${producto.descripcion}</p>
+                        <div class="showcase-price">$${producto.precio}</div>
+                        <div class="showcase-meta">
+                            <span>Stock: ${producto.stock}</span>
+                            ${producto.nuevo ? '<span class="badge-popular">NUEVO</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function cargarSubastasDestacadas() {
+            const subastas = JSON.parse(localStorage.getItem('subastas')) || [];
+            const container = document.getElementById('featured-auctions');
+            
+            // Filtrar subastas activas y tomar las primeras 6
+            const subastasActivas = subastas.filter(s => s.estado === 'activa').slice(0, 6);
+            
+            if (subastasActivas.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                        <h3>No hay subastas activas en este momento</h3>
+                        <p>Vuelve pronto para descubrir nuevas oportunidades</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = subastasActivas.map(subasta => {
+                const tiempoFormateado = formatearTiempo(subasta.tiempoRestante);
+                const totalPujas = subasta.pujas ? subasta.pujas.length : 0;
+                
+                return `
+                    <div class="showcase-item">
+                        <div class="showcase-image">
+                            ${subasta.emoji || '⚡'}
+                        </div>
+                        <div class="showcase-content">
+                            <h3 class="showcase-title">${subasta.nombre}</h3>
+                            <p class="showcase-description">${subasta.descripcion}</p>
+                            <div class="showcase-price">$${subasta.precioActual.toFixed(2)}</div>
+                            <div class="showcase-meta">
+                                <span>${tiempoFormateado}</span>
+                                <span>${totalPujas} pujas</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatearTiempo(segundos) {
+            if (segundos <= 0) return 'Finalizada';
+            
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            
+            if (horas > 0) {
+                return `${horas}h ${minutos}m`;
+            } else {
+                return `${minutos}m`;
+            }
+        }
+
+        function actualizarEstadisticas() {
+            const productos = JSON.parse(localStorage.getItem('productos')) || [];
+            const subastas = JSON.parse(localStorage.getItem('subastas')) || [];
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            
+            // Actualizar números (estos son ejemplos, en una app real vendrían de analytics)
+            document.getElementById('stats-users').textContent = `${usuarios.length}+`;
+            document.getElementById('stats-products').textContent = `${productos.length}+`;
+            document.getElementById('stats-auctions').textContent = `${subastas.filter(s => s.estado === 'activa').length}+`;
+            document.getElementById('stats-sold').textContent = '1,000+'; // Ejemplo
+        }
+
+        function setupNewsletter() {
+            const form = document.querySelector('.newsletter-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input[type="email"]').value;
+                    
+                    // Simular suscripción
+                    mostrarNotificacion('¡Gracias por suscribirte! Te mantendremos informado.', 'success');
+                    this.reset();
+                });
+            }
+        }
+
+        function setupAnimations() {
+            // Animación de aparición al hacer scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observar elementos animados
+            document.querySelectorAll('.animate-fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#27ae60' : tipo === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = mensaje;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Agregar estilos de animación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subastas - TCG Collector's Haven</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎴 TCG Collector's Haven</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Inicio</a>
+                <a href="tienda.html" class="nav-link">Tienda</a>
+                <a href="subastas.html" class="nav-link">Subastas</a>
+                <a href="#" class="nav-link" id="auth-link">Mi Cuenta</a>
+                <a href="#" class="nav-link cart" id="cart-link">🛒 Carrito (<span id="cart-count">0</span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Subastas -->
+    <section class="hero-subastas">
+        <div class="container">
+            <h2>Subastas en Vivo</h2>
+            <p>Puja por cartas únicas y artículos coleccionables raros</p>
+            <div class="subastas-stats">
+                <div class="stat">
+                    <h3 id="subastas-activas">0</h3>
+                    <p>Subastas Activas</p>
+                </div>
+                <div class="stat">
+                    <h3 id="pujas-totales">0</h3>
+                    <p>Pujas Hoy</p>
+                </div>
+                <div class="stat">
+                    <h3 id="usuarios-activos">0</h3>
+                    <p>Usuarios Activos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros Subastas -->
+    <section class="filtros-subastas">
+        <div class="container">
+            <div class="filtros-container">
+                <select id="estado-subasta" class="filter-select">
+                    <option value="todas">Todas las Subastas</option>
+                    <option value="activas">Subastas Activas</option>
+                    <option value="proximas">Próximas Subastas</option>
+                    <option value="finalizadas">Subastas Finalizadas</option>
+                </select>
+                <select id="categoria-subasta" class="filter-select">
+                    <option value="todas">Todas las Categorías</option>
+                    <option value="pokemon">Pokémon</option>
+                    <option value="magic">Magic: The Gathering</option>
+                    <option value="yugioh">Yu-Gi-Oh!</option>
+                </select>
+                <input type="text" id="search-subasta" class="search-input" placeholder="Buscar en subastas...">
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Subastas -->
+<section class="subastas">
+    <div class="container">
+        <div class="subastas-grid" id="subastas-grid">
+            <!-- Las subastas se cargarán con JavaScript -->
+        </div>
+        
+        <!-- Loading y mensajes -->
+        <div id="subastas-loading" style="text-align: center; padding: 2rem; display: none;">
+            <div class="loading"></div>
+            <p style="margin-top: 1rem; color: #666;">Cargando subastas...</p>
+        </div>
+        
+        <div id="subastas-empty" style="text-align: center; padding: 3rem; display: none;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">⚡</div>
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">No hay subastas disponibles</h3>
+            <p style="color: #666; margin-bottom: 2rem;">Vuelve pronto para descubrir nuevas oportunidades</p>
+            <button class="btn btn-primary" onclick="limpiarFiltrosSubastas()">Ver Todas las Subastas</button>
+        </div>
+    </div>
+</section>
+    <!-- Modal de Puja -->
+    <div id="puja-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-puja">&times;</span>
+            <h2>Realizar Puja</h2>
+            <div id="puja-info"></div>
+            <div class="puja-form">
+                <label for="monto-puja">Tu puja ($):</label>
+                <input type="number" id="monto-puja" min="0" step="0.01">
+                <div class="puja-actions">
+                    <button class="btn btn-primary" id="enviar-puja">Enviar Puja</button>
+                    <button class="btn btn-secondary" id="cancelar-puja">Cancelar</button>
+                </div>
+            </div>
+            <div class="historial-pujas">
+                <h3>Historial de Pujas</h3>
+                <div id="pujas-lista"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login/Registro -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-auth">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
+                <button class="auth-tab" data-tab="register">Registrarse</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <h3>Iniciar Sesión</h3>
+                <form class="login-form-auth">
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <h3>Crear Cuenta</h3>
+                <form class="register-form-auth">
+                    <input type="text" placeholder="Nombre completo" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Contraseña" required>
+                    <input type="password" placeholder="Confirmar contraseña" required>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Perfil -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-profile">&times;</span>
+            <h2>Mi Perfil</h2>
+            <div class="profile-info">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-details">
+                        <h3 id="profile-name">Usuario</h3>
+                        <p id="profile-email">email@ejemplo.com</p>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-number" id="pujas-realizadas">0</span>
+                        <span class="stat-label">Pujas Realizadas</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="compras-realizadas">0</span>
+                        <span class="stat-label">Compras</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number" id="subastas-ganadas">0</span>
+                        <span class="stat-label">Subastas Ganadas</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TCG Collector's Haven. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

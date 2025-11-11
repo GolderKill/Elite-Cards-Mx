@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - TCG Collector's Haven</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos minimalistas para el panel de admin */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .admin-sidebar .logo {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 2rem;
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: #34495e;
+            color: white;
+        }
+
+        .admin-nav-item.active {
+            background: #3498db;
+        }
+
+        .admin-content {
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-minimal {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-card-minimal.warning {
+            border-left-color: #f39c12;
+        }
+
+        .stat-card-minimal.success {
+            border-left-color: #27ae60;
+        }
+
+        .stat-card-minimal.danger {
+            border-left-color: #e74c3c;
+        }
+
+        .stat-number-minimal {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label-minimal {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .btn-minimal {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-minimal:hover {
+            background: #2980b9;
+        }
+
+        .btn-minimal.secondary {
+            background: #95a5a6;
+        }
+
+        .btn-minimal.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-minimal.success {
+            background: #27ae60;
+        }
+
+        .btn-minimal.success:hover {
+            background: #219a52;
+        }
+
+        .table-minimal {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .table-minimal th,
+        .table-minimal td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-minimal th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-minimal tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-minimal {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-edit {
+            color: #3498db;
+        }
+
+        .btn-edit:hover {
+            background: #ebf5fb;
+        }
+
+        .btn-delete {
+            color: #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background: #fdedec;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                display: none;
+            }
+            
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="logo">
+                <h2 style="color: white; margin: 0;">⚙️ Admin</h2>
+                <p style="color: #bdc3c7; margin: 0.5rem 0 0 0; font-size: 0.9rem;">TCG Collector's Haven</p>
+            </div>
+            
+            <nav class="admin-nav">
+                <button class="admin-nav-item active" data-section="dashboard">
+                    📊 Dashboard
+                </button>
+                <button class="admin-nav-item" data-section="productos">
+                    📦 Productos
+                </button>
+                <button class="admin-nav-item" data-section="subastas">
+                    ⚡ Subastas
+                </button>
+                <button class="admin-nav-item" data-section="usuarios">
+                    👥 Usuarios
+                </button>
+                <button class="admin-nav-item" data-section="ventas">
+                    💰 Ventas
+                </button>
+                <a href="index.html" class="admin-nav-item" style="margin-top: 2rem; background: #34495e; text-decoration: none;">
+                    🏠 Sitio Principal
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="admin-content">
+            <!-- Header -->
+            <div class="admin-header">
+                <div>
+                    <h1 style="margin: 0; color: #2c3e50;" id="admin-title">Dashboard</h1>
+                    <p style="margin: 0.5rem 0 0 0; color: #6c757d;" id="admin-subtitle">Resumen general del sistema</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="color: #6c757d;" id="admin-user-email"></span>
+                    <button class="btn-minimal secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <!-- Sección: Dashboard -->
+            <div id="dashboard" class="admin-section active">
+                <!-- Estadísticas -->
+                <div class="admin-stats">
+                    <div class="stat-card-minimal">
+                        <span class="stat-number-minimal" id="stat-ventas">$0</span>
+                        <span class="stat-label-minimal">Ventas Totales</span>
+                    </div>
+                    <div class="stat-card-minimal success">
+                        <span class="stat-number-minimal" id="stat-productos">0</span>
+                        <span class="stat-label-minimal">Productos Activos</span>
+                    </div>
+                    <div class="stat-card-minimal warning">
+                        <span class="stat-number-minimal" id="stat-subastas">0</span>
+                        <span class="stat-label-minimal">Subastas Activas</span>
+                    </div>
+                    <div class="stat-card-minimal danger">
+                        <span class="stat-number-minimal" id="stat-usuarios">0</span>
+                        <span class="stat-label-minimal">Usuarios Registrados</span>
+                    </div>
+                </div>
+
+                <!-- Productos Recientes -->
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2 class="section-title">📦 Productos Recientes</h2>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table-minimal">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-products">
+                                <!-- Los productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2 class="section-title">📋 Actividad Reciente</h2>
+                    </div>
+                    <div id="recent-activity">
+                        <!-- La actividad se cargará aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Productos -->
+            <div id="productos" class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">📦 Gestión de Productos</h2>
+                    <button class="btn-minimal" onclick="mostrarModalProducto()">+ Nuevo Producto</button>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table-minimal">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Categoría</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table">
+                            <!-- Los productos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Subastas -->
+            <div id="subastas" class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">⚡ Gestión de Subastas</h2>
+                    <button class="btn-minimal" onclick="mostrarModalSubasta()">+ Nueva Subasta</button>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table-minimal">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Puja Actual</th>
+                                <th>Pujas</th>
+                                <th>Tiempo</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auctions-table">
+                            <!-- Las subastas se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Usuarios -->
+            <div id="usuarios" class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">👥 Gestión de Usuarios</h2>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table-minimal">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Registro</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table">
+                            <!-- Los usuarios se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Ventas -->
+            <div id="ventas" class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">💰 Reporte de Ventas</h2>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="table-minimal">
+                        <thead>
+                            <tr>
+                                <th>Orden</th>
+                                <th>Cliente</th>
+                                <th>Productos</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-table">
+                            <!-- Las ventas se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Productos -->
+    <div id="modal-producto" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="cerrarModal('modal-producto')">&times;</span>
+            <h2 id="modal-producto-titulo">Nuevo Producto</h2>
+            
+            <form id="form-producto">
+                <div class="form-group">
+                    <label for="producto-nombre">Nombre del Producto:</label>
+                    <input type="text" id="producto-nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="producto-descripcion">Descripción:</label>
+                    <textarea id="producto-descripcion" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="producto-precio">Precio ($):</label>
+                    <input type="number" id="producto-precio" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="producto-stock">Stock:</label>
+                    <input type="number" id="producto-stock" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="producto-categoria">Categoría:</label>
+                    <select id="producto-categoria" required>
+                        <option value="pokemon">Pokémon</option>
+                        <option value="magic">Magic: The Gathering</option>
+                        <option value="yugioh">Yu-Gi-Oh!</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="producto-emoji">Emoji representativo:</label>
+                    <input type="text" id="producto-emoji" maxlength="2" placeholder="🔥">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-minimal secondary" onclick="cerrarModal('modal-producto')">Cancelar</button>
+                    <button type="submit" class="btn-minimal success">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Subastas -->
+    <div id="modal-subasta" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="cerrarModal('modal-subasta')">&times;</span>
+            <h2>Nueva Subasta</h2>
+            
+            <form id="form-subasta">
+                <div class="form-group">
+                    <label for="subasta-nombre">Nombre del Item:</label>
+                    <input type="text" id="subasta-nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subasta-descripcion">Descripción:</label>
+                    <textarea id="subasta-descripcion" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subasta-precio-inicial">Precio Inicial ($):</label>
+                    <input type="number" id="subasta-precio-inicial" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subasta-duracion">Duración (horas):</label>
+                    <input type="number" id="subasta-duracion" min="1" max="168" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subasta-categoria">Categoría:</label>
+                    <select id="subasta-categoria" required>
+                        <option value="pokemon">Pokémon</option>
+                        <option value="magic">Magic: The Gathering</option>
+                        <option value="yugioh">Yu-Gi-Oh!</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subasta-emoji">Emoji representativo:</label>
+                    <input type="text" id="subasta-emoji" maxlength="2" placeholder="⚡">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-minimal secondary" onclick="cerrarModal('modal-subasta')">Cancelar</button>
+                    <button type="submit" class="btn-minimal success">Crear Subasta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let productos = [];
+        let subastas = [];
+        let usuarios = [];
+        let productoEditando = null;
+        let subastaEditando = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            verificarAdmin();
+            cargarDatos();
+            setupEventListeners();
+            actualizarEstadisticas();
+            setInterval(actualizarTiemposSubastas, 1000);
+        });
+
+        function verificarAdmin() {
+            const usuarioActual = JSON.parse(localStorage.getItem('usuarioActual'));
+            if (!usuarioActual || usuarioActual.rol !== 'admin') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            document.getElementById('admin-user-email').textContent = usuarioActual.email;
+        }
+
+        function cargarDatos() {
+            // Cargar datos del localStorage
+            productos = JSON.parse(localStorage.getItem('productos')) || [];
+            subastas = JSON.parse(localStorage.getItem('subastas')) || [];
+            usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            
+            // Actualizar interfaces
+            actualizarTablaProductos();
+            actualizarTablaSubastas();
+            actualizarTablaUsuarios();
+            actualizarTablaVentas();
+            actualizarProductosRecientes();
+            actualizarActividadReciente();
+        }
+
+        function setupEventListeners() {
+            // Navegación del sidebar
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                if (item.getAttribute('data-section')) {
+                    item.addEventListener('click', function() {
+                        cambiarSeccion(this.getAttribute('data-section'));
+                    });
+                }
+            });
+
+            // Formularios
+            document.getElementById('form-producto').addEventListener('submit', guardarProducto);
+            document.getElementById('form-subasta').addEventListener('submit', guardarSubasta);
+        }
+
+        function cambiarSeccion(seccion) {
+            // Actualizar navegación
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${seccion}"]`).classList.add('active');
+
+            // Actualizar contenido
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(seccion).classList.add('active');
+
+            // Actualizar título
+            const titulos = {
+                'dashboard': 'Dashboard',
+                'productos': 'Gestión de Productos',
+                'subastas': 'Gestión de Subastas',
+                'usuarios': 'Gestión de Usuarios',
+                'ventas': 'Reporte de Ventas'
+            };
+
+            const subtitulos = {
+                'dashboard': 'Resumen general del sistema',
+                'productos': 'Gestiona el inventario de productos',
+                'subastas': 'Controla las subastas activas',
+                'usuarios': 'Administra usuarios registrados',
+                'ventas': 'Reporte de ventas y transacciones'
+            };
+
+            document.getElementById('admin-title').textContent = titulos[seccion];
+            document.getElementById('admin-subtitle').textContent = subtitulos[seccion];
+        }
+
+        // Funciones para productos
+        function actualizarTablaProductos() {
+            const tbody = document.getElementById('products-table');
+            tbody.innerHTML = '';
+
+            productos.forEach(producto => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">${producto.emoji || '🃏'}</div>
+                            <div>
+                                <div style="font-weight: 500;">${producto.nombre}</div>
+                                <div style="font-size: 0.8rem; color: #6c757d;">${producto.descripcion}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>$${producto.precio}</td>
+                    <td>${producto.stock}</td>
+                    <td>${producto.categoria}</td>
+                    <td>
+                        <span class="badge-minimal ${producto.stock > 0 ? 'badge-success' : 'badge-danger'}">
+                            ${producto.stock > 0 ? 'Activo' : 'Sin Stock'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-edit" onclick="editarProducto(${producto.id})" title="Editar">✏️</button>
+                            <button class="btn-icon btn-delete" onclick="eliminarProducto(${producto.id})" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function mostrarModalProducto(producto = null) {
+            productoEditando = producto;
+            const modal = document.getElementById('modal-producto');
+            const titulo = document.getElementById('modal-producto-titulo');
+            const form = document.getElementById('form-producto');
+
+            if (producto) {
+                titulo.textContent = 'Editar Producto';
+                document.getElementById('producto-nombre').value = producto.nombre;
+                document.getElementById('producto-descripcion').value = producto.descripcion;
+                document.getElementById('producto-precio').value = producto.precio;
+                document.getElementById('producto-stock').value = producto.stock;
+                document.getElementById('producto-categoria').value = producto.categoria;
+                document.getElementById('producto-emoji').value = producto.emoji || '';
+            } else {
+                titulo.textContent = 'Nuevo Producto';
+                form.reset();
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function guardarProducto(e) {
+            e.preventDefault();
+
+            const productoData = {
+                nombre: document.getElementById('producto-nombre').value,
+                descripcion: document.getElementById('producto-descripcion').value,
+                precio: parseFloat(document.getElementById('producto-precio').value),
+                stock: parseInt(document.getElementById('producto-stock').value),
+                categoria: document.getElementById('producto-categoria').value,
+                emoji: document.getElementById('producto-emoji').value || '🃏'
+            };
+
+            if (productoEditando) {
+                // Actualizar producto existente
+                Object.assign(productoEditando, productoData);
+                mostrarNotificacion('Producto actualizado correctamente', 'success');
+            } else {
+                // Crear nuevo producto
+                const nuevoProducto = {
+                    id: Date.now(),
+                    ...productoData
+                };
+                productos.push(nuevoProducto);
+                mostrarNotificacion('Producto creado correctamente', 'success');
+            }
+
+            guardarDatos();
+            cerrarModal('modal-producto');
+            productoEditando = null;
+        }
+
+        function editarProducto(id) {
+            const producto = productos.find(p => p.id === id);
+            if (producto) {
+                mostrarModalProducto(producto);
+            }
+        }
+
+        function eliminarProducto(id) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                productos = productos.filter(p => p.id !== id);
+                guardarDatos();
+                mostrarNotificacion('Producto eliminado', 'success');
+            }
+        }
+
+                // Funciones para subastas
+        function actualizarTablaSubastas() {
+            const tbody = document.getElementById('auctions-table');
+            tbody.innerHTML = '';
+
+            subastas.forEach(subasta => {
+                const tiempoFormateado = formatearTiempo(subasta.tiempoRestante);
+                const estado = subasta.estado || 'activa';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight: 500;">${subasta.nombre}</div>
+                        <div style="font-size: 0.8rem; color: #6c757d;">${subasta.descripcion}</div>
+                    </td>
+                    <td>$${subasta.precioActual.toFixed(2)}</td>
+                    <td>${subasta.pujas ? subasta.pujas.length : 0}</td>
+                    <td>${tiempoFormateado}</td>
+                    <td>
+                        <span class="badge-minimal ${estado === 'activa' ? 'badge-success' : estado === 'proxima' ? 'badge-warning' : 'badge-danger'}">
+                            ${estado === 'activa' ? 'Activa' : estado === 'proxima' ? 'Próxima' : 'Finalizada'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            ${estado === 'activa' ? 
+                                `<button class="btn-icon btn-edit" onclick="finalizarSubasta(${subasta.id})" title="Finalizar">⏹️</button>` : 
+                                ''
+                            }
+                            <button class="btn-icon btn-delete" onclick="eliminarSubasta(${subasta.id})" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function mostrarModalSubasta(subasta = null) {
+            subastaEditando = subasta;
+            const modal = document.getElementById('modal-subasta');
+            const form = document.getElementById('form-subasta');
+
+            if (subasta) {
+                document.getElementById('subasta-nombre').value = subasta.nombre;
+                document.getElementById('subasta-descripcion').value = subasta.descripcion;
+                document.getElementById('subasta-precio-inicial').value = subasta.precioInicial;
+                document.getElementById('subasta-duracion').value = Math.ceil(subasta.tiempoRestante / 3600);
+                document.getElementById('subasta-categoria').value = subasta.categoria;
+                document.getElementById('subasta-emoji').value = subasta.emoji || '';
+            } else {
+                form.reset();
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function guardarSubasta(e) {
+            e.preventDefault();
+
+            const subastaData = {
+                nombre: document.getElementById('subasta-nombre').value,
+                descripcion: document.getElementById('subasta-descripcion').value,
+                precioActual: parseFloat(document.getElementById('subasta-precio-inicial').value),
+                precioInicial: parseFloat(document.getElementById('subasta-precio-inicial').value),
+                categoria: document.getElementById('subasta-categoria').value,
+                duracion: parseInt(document.getElementById('subasta-duracion').value),
+                emoji: document.getElementById('subasta-emoji').value || '⚡'
+            };
+
+            if (subastaEditando) {
+                // Actualizar subasta existente
+                Object.assign(subastaEditando, subastaData);
+                subastaEditando.tiempoRestante = subastaData.duracion * 3600;
+                mostrarNotificacion('Subasta actualizada correctamente', 'success');
+            } else {
+                // Crear nueva subasta
+                const nuevaSubasta = {
+                    id: Date.now(),
+                    estado: 'activa',
+                    tiempoRestante: subastaData.duracion * 3600,
+                    pujas: [],
+                    ...subastaData
+                };
+                subastas.push(nuevaSubasta);
+                mostrarNotificacion('Subasta creada correctamente', 'success');
+            }
+
+            guardarDatos();
+            cerrarModal('modal-subasta');
+            subastaEditando = null;
+        }
+
+        function finalizarSubasta(id) {
+            const subasta = subastas.find(s => s.id === id);
+            if (subasta) {
+                subasta.estado = 'finalizada';
+                subasta.tiempoRestante = 0;
+                guardarDatos();
+                mostrarNotificacion('Subasta finalizada', 'success');
+            }
+        }
+
+        function eliminarSubasta(id) {
+            if (confirm('¿Estás seguro de eliminar esta subasta?')) {
+                subastas = subastas.filter(s => s.id !== id);
+                guardarDatos();
+                mostrarNotificacion('Subasta eliminada', 'success');
+            }
+        }
+
+        // Funciones para usuarios
+        function actualizarTablaUsuarios() {
+            const tbody = document.getElementById('users-table');
+            tbody.innerHTML = '';
+
+            usuarios.forEach(usuario => {
+                const iniciales = usuario.nombre.split(' ').map(n => n[0]).join('').toUpperCase();
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div class="user-item">
+                            <div class="user-avatar">${iniciales}</div>
+                            <div>
+                                <div style="font-weight: 500;">${usuario.nombre}</div>
+                                <div style="font-size: 0.8rem; color: #6c757d;">ID: ${usuario.id}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${usuario.email}</td>
+                    <td>${new Date(usuario.fechaRegistro).toLocaleDateString()}</td>
+                    <td>
+                        <span class="badge-minimal ${usuario.rol === 'admin' ? 'badge-danger' : 'badge-info'}">
+                            ${usuario.rol === 'admin' ? 'Administrador' : 'Usuario'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            ${usuario.rol !== 'admin' ? 
+                                `<button class="btn-icon btn-edit" onclick="promoverAdmin(${usuario.id})" title="Hacer Admin">👑</button>` : 
+                                ''
+                            }
+                            ${usuario.email !== 'admin@tcg.com' ? 
+                                `<button class="btn-icon btn-delete" onclick="eliminarUsuario(${usuario.id})" title="Eliminar">🗑️</button>` : 
+                                ''
+                            }
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function promoverAdmin(id) {
+            const usuario = usuarios.find(u => u.id === id);
+            if (usuario && confirm(`¿Promover a ${usuario.nombre} como administrador?`)) {
+                usuario.rol = 'admin';
+                guardarDatos();
+                mostrarNotificacion(`${usuario.nombre} ahora es administrador`, 'success');
+            }
+        }
+
+        function eliminarUsuario(id) {
+            const usuario = usuarios.find(u => u.id === id);
+            if (usuario && confirm(`¿Eliminar al usuario ${usuario.nombre}?`)) {
+                usuarios = usuarios.filter(u => u.id !== id);
+                guardarDatos();
+                mostrarNotificacion('Usuario eliminado', 'success');
+            }
+        }
+
+        // Funciones para ventas
+        function actualizarTablaVentas() {
+            const tbody = document.getElementById('sales-table');
+            tbody.innerHTML = '';
+
+            // Simular datos de ventas (en una app real esto vendría de una base de datos)
+            const ventas = JSON.parse(localStorage.getItem('comprasUsuario')) || [];
+            
+            if (ventas.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #6c757d;">
+                            No hay ventas registradas aún
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            ventas.forEach(venta => {
+                const productosTexto = venta.productos.map(p => p.nombre).join(', ');
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${venta.id}</td>
+                    <td>Cliente #${venta.id}</td>
+                    <td>${productosTexto}</td>
+                    <td>$${venta.total.toFixed(2)}</td>
+                    <td>${new Date(venta.fecha).toLocaleDateString()}</td>
+                    <td>
+                        <span class="badge-minimal badge-success">Completado</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Funciones auxiliares
+        function formatearTiempo(segundos) {
+            if (segundos <= 0) return 'Finalizada';
+            
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            const segs = segundos % 60;
+            
+            if (horas > 0) {
+                return `${horas}h ${minutos}m ${segs}s`;
+            } else if (minutos > 0) {
+                return `${minutos}m ${segs}s`;
+            } else {
+                return `${segs}s`;
+            }
+        }
+
+        function actualizarTiemposSubastas() {
+            let cambios = false;
+            
+            subastas.forEach(subasta => {
+                if (subasta.estado === 'activa' && subasta.tiempoRestante > 0) {
+                    subasta.tiempoRestante--;
+                    cambios = true;
+                    
+                    if (subasta.tiempoRestante <= 0) {
+                        subasta.estado = 'finalizada';
+                        mostrarNotificacion(`Subasta "${subasta.nombre}" ha finalizado`, 'info');
+                    }
+                }
+            });
+            
+            if (cambios) {
+                guardarDatos();
+                actualizarTablaSubastas();
+                actualizarEstadisticas();
+            }
+        }
+
+        function actualizarEstadisticas() {
+            // Ventas totales (simulado)
+            const ventas = JSON.parse(localStorage.getItem('comprasUsuario')) || [];
+            const totalVentas = ventas.reduce((sum, venta) => sum + venta.total, 0);
+            
+            // Productos activos
+            const productosActivos = productos.filter(p => p.stock > 0).length;
+            
+            // Subastas activas
+            const subastasActivas = subastas.filter(s => s.estado === 'activa').length;
+            
+            // Usuarios registrados
+            const totalUsuarios = usuarios.length;
+
+            document.getElementById('stat-ventas').textContent = `$${totalVentas.toFixed(2)}`;
+            document.getElementById('stat-productos').textContent = productosActivos;
+            document.getElementById('stat-subastas').textContent = subastasActivas;
+            document.getElementById('stat-usuarios').textContent = totalUsuarios;
+        }
+
+        function actualizarProductosRecientes() {
+            const tbody = document.getElementById('recent-products');
+            tbody.innerHTML = '';
+
+            const productosRecientes = productos.slice(-5).reverse();
+            
+            productosRecientes.forEach(producto => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem;">${producto.emoji || '🃏'}</div>
+                            <div style="font-weight: 500;">${producto.nombre}</div>
+                        </div>
+                    </td>
+                    <td>$${producto.precio}</td>
+                    <td>${producto.stock}</td>
+                    <td>
+                        <span class="badge-minimal ${producto.stock > 0 ? 'badge-success' : 'badge-danger'}">
+                            ${producto.stock > 0 ? 'En stock' : 'Agotado'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function actualizarActividadReciente() {
+            const container = document.getElementById('recent-activity');
+            container.innerHTML = '';
+
+            const actividades = [
+                { tipo: 'usuario', texto: 'Nuevo usuario registrado', tiempo: 'hace 5 minutos', icono: '👤' },
+                { tipo: 'venta', texto: 'Venta completada - Charizard 1st Edition', tiempo: 'hace 15 minutos', icono: '💰' },
+                { tipo: 'subasta', texto: 'Subasta iniciada - Black Lotus', tiempo: 'hace 1 hora', icono: '⚡' },
+                { tipo: 'producto', texto: 'Producto agregado - Dark Magician', tiempo: 'hace 2 horas', icono: '📦' }
+            ];
+
+            actividades.forEach(actividad => {
+                const div = document.createElement('div');
+                div.style.cssText = 'display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;';
+                
+                div.innerHTML = `
+                    <div style="width: 32px; height: 32px; background: #3498db; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem;">${actividad.icono}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">${actividad.texto}</div>
+                        <div style="font-size: 0.8rem; color: #6c757d;">${actividad.tiempo}</div>
+                    </div>
+                    <span class="badge-minimal ${actividad.tipo === 'usuario' ? 'badge-success' : actividad.tipo === 'venta' ? 'badge-info' : 'badge-warning'}">
+                        ${actividad.tipo === 'usuario' ? 'Usuario' : actividad.tipo === 'venta' ? 'Venta' : 'Subasta'}
+                    </span>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function guardarDatos() {
+            localStorage.setItem('productos', JSON.stringify(productos));
+            localStorage.setItem('subastas', JSON.stringify(subastas));
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            
+            // Actualizar todas las interfaces
+            actualizarTablaProductos();
+            actualizarTablaSubastas();
+            actualizarTablaUsuarios();
+            actualizarTablaVentas();
+            actualizarProductosRecientes();
+            actualizarEstadisticas();
+        }
+
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            productoEditando = null;
+            subastaEditando = null;
+        }
+
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            // Crear notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#27ae60' : tipo === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = mensaje;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Agregar estilos de animación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

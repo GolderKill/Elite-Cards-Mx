@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel - TCG Collector's Haven</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos minimalistas para el panel de usuario */
+        .user-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .user-sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .user-sidebar .logo {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 2rem;
+        }
+
+        .user-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .user-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .user-nav-item:hover,
+        .user-nav-item.active {
+            background: #34495e;
+            color: white;
+        }
+
+        .user-nav-item.active {
+            background: #3498db;
+        }
+
+        .user-content {
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-minimal {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-card-minimal.warning {
+            border-left-color: #f39c12;
+        }
+
+        .stat-card-minimal.success {
+            border-left-color: #27ae60;
+        }
+
+        .stat-card-minimal.danger {
+            border-left-color: #e74c3c;
+        }
+
+        .stat-number-minimal {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label-minimal {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .user-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        .user-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .btn-minimal {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-minimal:hover {
+            background: #2980b9;
+        }
+
+        .btn-minimal.secondary {
+            background: #95a5a6;
+        }
+
+        .btn-minimal.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-minimal.success {
+            background: #27ae60;
+        }
+
+        .btn-minimal.success:hover {
+            background: #219a52;
+        }
+
+        .table-minimal {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .table-minimal th,
+        .table-minimal td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table-minimal th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-minimal tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-minimal {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-edit {
+            color: #3498db;
+        }
+
+        .btn-edit:hover {
+            background: #ebf5fb;
+        }
+
+        .btn-delete {
+            color: #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background: #fdedec;
+        }
+
+        .btn-view {
+            color: #27ae60;
+        }
+
+        .btn-view:hover {
+            background: #eafaf1;
+        }
+
+        /* Cards para elementos */
+        .item-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .item-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-desc {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-details {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-sidebar {
+                display: none;
+            }
+            
+            .user-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-layout">
+        <!-- Sidebar -->
+        <aside class="user-sidebar">
+            <div class="logo">
+                <h2 style="color: white; margin: 0;">👤 Mi Panel</h2>
+                <p style="color: #bdc3c7; margin: 0.5rem 0 0 0; font-size: 0.9rem;">TCG Collector's Haven</p>
+            </div>
+            
+            <nav class="user-nav">
+                <button class="user-nav-item active" data-section="resumen">
+                    📊 Resumen
+                </button>
+                <button class="user-nav-item" data-section="compras">
+                    🛒 Mis Compras
+                </button>
+                <button class="user-nav-item" data-section="pujas">
+                    ⚡ Mis Pujas
+                </button>
+                <button class="user-nav-item" data-section="ganadas">
+                    🏆 Subastas Ganadas
+                </button>
+                <a href="index.html" class="user-nav-item" style="margin-top: 2rem; background: #34495e; text-decoration: none;">
+                    🏠 Volver al Sitio
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="user-content">
+            <!-- Header -->
+            <div class="user-header">
+                <div>
+                    <h1 style="margin: 0; color: #2c3e50;" id="user-title">Mi Panel</h1>
+                    <p style="margin: 0.5rem 0 0 0; color: #6c757d;" id="user-subtitle">Resumen de tu actividad</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="color: #6c757d;" id="user-email"></span>
+                    <button class="btn-minimal secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <!-- Sección: Resumen -->
+            <div id="resumen" class="user-section active">
+                <!-- Estadísticas Personales -->
+                <div class="user-stats">
+                    <div class="stat-card-minimal">
+                        <span class="stat-number-minimal" id="user-total-gastado">$0</span>
+                        <span class="stat-label-minimal">Total Gastado</span>
+                    </div>
+                    <div class="stat-card-minimal success">
+                        <span class="stat-number-minimal" id="user-compras-totales">0</span>
+                        <span class="stat-label-minimal">Compras Realizadas</span>
+                    </div>
+                    <div class="stat-card-minimal warning">
+                        <span class="stat-number-minimal" id="user-pujas-activas">0</span>
+                        <span class="stat-label-minimal">Pujas Activas</span>
+                    </div>
+                    <div class="stat-card-minimal danger">
+                        <span class="stat-number-minimal" id="user-subastas-ganadas">0</span>
+                        <span class="stat-label-minimal">Subastas Ganadas</span>
+                    </div>
+                </div>
+
+                <!-- Pujas Activas -->
+                <div class="user-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⚡ Mis Pujas Activas</h2>
+                        <button class="btn-minimal" onclick="window.location.href='subastas.html'">Ver Todas las Subastas</button>
+                    </div>
+                    <div id="pujas-activas-list">
+                        <!-- Las pujas activas se cargarán aquí -->
+                    </div>
+                </div>
+
+                <!-- Compras Recientes -->
+                <div class="user-section">
+                    <div class="section-header">
+                        <h2 class="section-title">🛒 Compras Recientes</h2>
+                        <button class="btn-minimal" onclick="window.location.href='tienda.html'">Seguir Comprando</button>
+                    </div>
+                    <div id="compras-recientes-list">
+                        <!-- Las compras recientes se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Compras -->
+            <div id="compras" class="user-section">
+                <div class="section-header">
+                    <h2 class="section-title">🛒 Historial de Compras</h2>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table-minimal">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Fecha</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compras-table">
+                            <!-- El historial de compras se cargará aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Pujas -->
+            <div id="pujas" class="user-section">
+                <div class="section-header">
+                    <h2 class="section-title">⚡ Mis Pujas</h2>
+                </div>
+                <div id="pujas-list">
+                    <!-- Todas las pujas se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Sección: Ganadas -->
+            <div id="ganadas" class="user-section">
+                <div class="section-header">
+                    <h2 class="section-title">🏆 Subastas Ganadas</h2>
+                </div>
+                <div id="ganadas-list">
+                    <!-- Las subastas ganadas se cargarán aquí -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Variables globales
+        let usuarioActual = null;
+        let compras = [];
+        let subastas = [];
+        let productos = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            verificarUsuario();
+            cargarDatosUsuario();
+            setupEventListeners();
+            actualizarEstadisticasUsuario();
+            setInterval(actualizarTiemposPujas, 1000);
+        });
+
+        function verificarUsuario() {
+            usuarioActual = JSON.parse(localStorage.getItem('usuarioActual'));
+            if (!usuarioActual) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            document.getElementById('user-email').textContent = usuarioActual.email;
+            
+            // Mostrar nombre en el título si está disponible
+            if (usuarioActual.nombre) {
+                document.getElementById('user-title').textContent = `Bienvenido, ${usuarioActual.nombre}`;
+            }
+        }
+
+        function cargarDatosUsuario() {
+            // Cargar datos del localStorage
+            compras = JSON.parse(localStorage.getItem('comprasUsuario')) || [];
+            subastas = JSON.parse(localStorage.getItem('subastas')) || [];
+            productos = JSON.parse(localStorage.getItem('productos')) || [];
+            
+            // Actualizar interfaces
+            actualizarPujasActivas();
+            actualizarComprasRecientes();
+            actualizarHistorialCompras();
+            actualizarTodasLasPujas();
+            actualizarSubastasGanadas();
+        }
+
+        function setupEventListeners() {
+            // Navegación del sidebar
+            document.querySelectorAll('.user-nav-item').forEach(item => {
+                if (item.getAttribute('data-section')) {
+                    item.addEventListener('click', function() {
+                        cambiarSeccionUsuario(this.getAttribute('data-section'));
+                    });
+                }
+            });
+        }
+
+        function cambiarSeccionUsuario(seccion) {
+            // Actualizar navegación
+            document.querySelectorAll('.user-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${seccion}"]`).classList.add('active');
+
+            // Actualizar contenido
+            document.querySelectorAll('.user-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(seccion).classList.add('active');
+
+            // Actualizar título y subtítulo
+            const titulos = {
+                'resumen': 'Mi Panel',
+                'compras': 'Mis Compras',
+                'pujas': 'Mis Pujas',
+                'ganadas': 'Subastas Ganadas'
+            };
+
+            const subtitulos = {
+                'resumen': 'Resumen de tu actividad',
+                'compras': 'Historial completo de compras',
+                'pujas': 'Todas tus pujas activas y finalizadas',
+                'ganadas': 'Subastas que has ganado'
+            };
+
+            document.getElementById('user-title').textContent = titulos[seccion];
+            document.getElementById('user-subtitle').textContent = subtitulos[seccion];
+        }
+
+        // Funciones para estadísticas
+        function actualizarEstadisticasUsuario() {
+            // Total gastado
+            const totalGastado = compras.reduce((sum, compra) => sum + compra.total, 0);
+            
+            // Compras totales
+            const comprasTotales = compras.length;
+            
+            // Pujas activas
+            const pujasActivas = subastas.filter(subasta => 
+                subasta.estado === 'activa' && 
+                subasta.pujas && 
+                subasta.pujas.some(puja => puja.usuario === "Tú")
+            ).length;
+            
+            // Subastas ganadas
+            const subastasGanadas = subastas.filter(subasta => 
+                subasta.estado === 'finalizada' && 
+                subasta.pujas && 
+                subasta.pujas.length > 0 && 
+                subasta.pujas[0].usuario === "Tú"
+            ).length;
+
+            document.getElementById('user-total-gastado').textContent = `$${totalGastado.toFixed(2)}`;
+            document.getElementById('user-compras-totales').textContent = comprasTotales;
+            document.getElementById('user-pujas-activas').textContent = pujasActivas;
+            document.getElementById('user-subastas-ganadas').textContent = subastasGanadas;
+        }
+
+        // Funciones para pujas activas
+        function actualizarPujasActivas() {
+            const container = document.getElementById('pujas-activas-list');
+            container.innerHTML = '';
+
+            const pujasActivas = subastas.filter(subasta => 
+                subasta.estado === 'activa' && 
+                subasta.pujas && 
+                subasta.pujas.some(puja => puja.usuario === "Tú")
+            );
+
+            if (pujasActivas.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                        <h3 style="margin-bottom: 0.5rem;">No tienes pujas activas</h3>
+                        <p>Participa en alguna subasta para ver tus pujas aquí</p>
+                        <button class="btn-minimal" onclick="window.location.href='subastas.html'" style="margin-top: 1rem;">
+                            Ver Subastas Activas
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            pujasActivas.forEach(subasta => {
+                const miPuja = subasta.pujas.find(puja => puja.usuario === "Tú");
+                const pujaMasAlta = subasta.pujas.reduce((max, puja) => puja.monto > max ? puja.monto : max, 0);
+                const esGanador = miPuja && miPuja.monto === pujaMasAlta;
+                
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.innerHTML = `
+                    <div class="item-icon">${subasta.emoji || '⚡'}</div>
+                    <div class="item-info">
+                        <div class="item-title">${subasta.nombre}</div>
+                        <div class="item-desc">${subasta.descripcion}</div>
+                        <div class="item-details">
+                            <span><strong>Tu puja:</strong> $${miPuja.monto.toFixed(2)}</span>
+                            <span><strong>Tiempo:</strong> ${formatearTiempo(subasta.tiempoRestante)}</span>
+                            <span class="badge-minimal ${esGanador ? 'badge-success' : 'badge-warning'}">
+                                ${esGanador ? '🏆 Ganando' : '💫 En competencia'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-icon btn-view" onclick="window.location.href='subastas.html'" title="Ver Subasta">👁️</button>
+                        <button class="btn-minimal" onclick="pujarDeNuevo(${subasta.id})" style="padding: 0.5rem 1rem;">Pujar</button>
+                    </div>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+        // Funciones para compras
+        function actualizarComprasRecientes() {
+            const container = document.getElementById('compras-recientes-list');
+            container.innerHTML = '';
+
+            const comprasRecientes = compras.slice(-3).reverse();
+
+            if (comprasRecientes.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6c757d;">
+                        <p>No tienes compras recientes</p>
+                    </div>
+                `;
+                return;
+            }
+
+            comprasRecientes.forEach(compra => {
+                const productoPrincipal = compra.productos[0];
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.innerHTML = `
+                    <div class="item-icon">🛒</div>
+                    <div class="item-info">
+                        <div class="item-title">Orden #${compra.id}</div>
+                        <div class="item-desc">${compra.productos.length} producto(s) - ${new Date(compra.fecha).toLocaleDateString()}</div>
+                        <div class="item-details">
+                            <span><strong>Total:</strong> $${compra.total.toFixed(2)}</span>
+                            <span class="badge-minimal badge-success">Completado</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-icon btn-view" onclick="verDetallesCompra(${compra.id})" title="Ver Detalles">👁️</button>
+                    </div>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+        function actualizarHistorialCompras() {
+            const tbody = document.getElementById('compras-table');
+            tbody.innerHTML = '';
+
+            if (compras.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem; color: #6c757d;">
+                            No tienes compras registradas
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            compras.forEach(compra => {
+                const productosTexto = compra.productos.map(p => p.nombre).join(', ');
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-weight: 500;">${productosTexto}</div>
+                        <div style="font-size: 0.8rem; color: #6c757d;">Orden #${compra.id}</div>
+                    </td>
+                    <td>${new Date(compra.fecha).toLocaleDateString()}</td>
+                    <td>${compra.productos.reduce((sum, p) => sum + p.cantidad, 0)}</td>
+                    <td>$${compra.total.toFixed(2)}</td>
+                    <td>
+                        <span class="badge-minimal badge-success">Completado</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-view" onclick="verDetallesCompra(${compra.id})" title="Ver Detalles">👁️</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Funciones para pujas
+        function actualizarTodasLasPujas() {
+            const container = document.getElementById('pujas-list');
+            container.innerHTML = '';
+
+            const todasLasPujas = subastas.filter(subasta => 
+                subasta.pujas && 
+                subasta.pujas.some(puja => puja.usuario === "Tú")
+            );
+
+            if (todasLasPujas.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                        <h3 style="margin-bottom: 0.5rem;">No has participado en subastas</h3>
+                        <p>¡Encuentra cartas únicas y comienza a pujar!</p>
+                        <button class="btn-minimal" onclick="window.location.href='subastas.html'" style="margin-top: 1rem;">
+                            Explorar Subastas
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            todasLasPujas.forEach(subasta => {
+                const miPuja = subasta.pujas.find(puja => puja.usuario === "Tú");
+                const pujaMasAlta = subasta.pujas.reduce((max, puja) => puja.monto > max ? puja.monto : max, 0);
+                const esGanador = subasta.estado === 'finalizada' && miPuja && miPuja.monto === pujaMasAlta;
+                
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.innerHTML = `
+                    <div class="item-icon">${subasta.emoji || '⚡'}</div>
+                    <div class="item-info">
+                        <div class="item-title">${subasta.nombre}</div>
+                        <div class="item-desc">${subasta.descripcion}</div>
+                        <div class="item-details">
+                            <span><strong>Tu puja:</strong> $${miPuja.monto.toFixed(2)}</span>
+                            <span><strong>Estado:</strong> ${subasta.estado}</span>
+                            <span class="badge-minimal ${esGanador ? 'badge-success' : subasta.estado === 'activa' ? 'badge-warning' : 'badge-danger'}">
+                                ${esGanador ? '🏆 Ganada' : subasta.estado === 'activa' ? 'Activa' : 'Finalizada'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-icon btn-view" onclick="window.location.href='subastas.html'" title="Ver Subasta">👁️</button>
+                        ${subasta.estado === 'activa' ? 
+                            `<button class="btn-minimal" onclick="pujarDeNuevo(${subasta.id})" style="padding: 0.5rem 1rem;">Pujar</button>` : 
+                            ''
+                        }
+                    </div>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+        // Funciones para subastas ganadas
+        function actualizarSubastasGanadas() {
+            const container = document.getElementById('ganadas-list');
+            container.innerHTML = '';
+
+            const subastasGanadas = subastas.filter(subasta => 
+                subasta.estado === 'finalizada' && 
+                subasta.pujas && 
+                subasta.pujas.length > 0 && 
+                subasta.pujas[0].usuario === "Tú"
+            );
+
+            if (subastasGanadas.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6c757d;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏆</div>
+                        <h3 style="margin-bottom: 0.5rem;">No has ganado subastas aún</h3>
+                        <p>¡Sigue pujando para aumentar tus chances de ganar!</p>
+                        <button class="btn-minimal" onclick="window.location.href='subastas.html'" style="margin-top: 1rem;">
+                            Ver Subastas
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            subastasGanadas.forEach(subasta => {
+                const miPuja = subasta.pujas.find(puja => puja.usuario === "Tú");
+                
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.innerHTML = `
+                    <div class="item-icon">${subasta.emoji || '⚡'}</div>
+                    <div class="item-info">
+                        <div class="item-title">${subasta.nombre}</div>
+                        <div class="item-desc">${subasta.descripcion}</div>
+                        <div class="item-details">
+                            <span><strong>Precio final:</strong> $${subasta.precioActual.toFixed(2)}</span>
+                            <span><strong>Ganada:</strong> ${new Date().toLocaleDateString()}</span>
+                            <span class="badge-minimal badge-success">🏆 Ganada</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-minimal success" onclick="procesarPago(${subasta.id})" style="padding: 0.5rem 1rem;">
+                            Pagar
+                        </button>
+                        <button class="btn-icon btn-view" title="Ver Detalles">👁️</button>
+                    </div>
+                `;
+                container.appendChild(itemCard);
+            });
+        }
+
+        // Funciones auxiliares
+        function formatearTiempo(segundos) {
+            if (segundos <= 0) return 'Finalizada';
+            
+            const horas = Math.floor(segundos / 3600);
+            const minutos = Math.floor((segundos % 3600) / 60);
+            const segs = segundos % 60;
+            
+            if (horas > 0) {
+                return `${horas}h ${minutos}m ${segs}s`;
+            } else if (minutos > 0) {
+                return `${minutos}m ${segs}s`;
+            } else {
+                return `${segs}s`;
+            }
+        }
+
+        function actualizarTiemposPujas() {
+            let cambios = false;
+            
+            subastas.forEach(subasta => {
+                if (subasta.estado === 'activa' && subasta.tiempoRestante > 0) {
+                    subasta.tiempoRestante--;
+                    cambios = true;
+                }
+            });
+            
+            if (cambios) {
+                localStorage.setItem('subastas', JSON.stringify(subastas));
+                actualizarPujasActivas();
+                actualizarTodasLasPujas();
+                actualizarEstadisticasUsuario();
+            }
+        }
+
+        // Funciones de interacción
+        function pujarDeNuevo(subastaId) {
+            window.location.href = `subastas.html#pujar-${subastaId}`;
+        }
+
+        function verDetallesCompra(compraId) {
+            alert(`Mostrando detalles de la compra #${compraId}`);
+            // En una implementación real, esto mostraría un modal con los detalles
+        }
+
+        function procesarPago(subastaId) {
+            if (confirm('¿Proceder con el pago de esta subasta ganada?')) {
+                mostrarNotificacion('Redirigiendo a pasarela de pago...', 'success');
+                // En una implementación real, esto redirigiría a una pasarela de pago
+                setTimeout(() => {
+                    mostrarNotificacion('¡Pago procesado exitosamente!', 'success');
+                }, 2000);
+            }
+        }
+
+        function mostrarNotificacion(mensaje, tipo = 'info') {
+            // Crear notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#27ae60' : tipo === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = mensaje;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Agregar estilos de animación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
