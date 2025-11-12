@@ -5,6 +5,263 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subastas - TCG Collector's Haven</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ESTILOS ESPECÍFICOS PARA SUBASTAS */
+        .subastas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .producto-subasta {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e1e8ed;
+        }
+
+        .producto-subasta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .subasta-imagen {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .subasta-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .producto-subasta:hover .subasta-imagen img {
+            transform: scale(1.05);
+        }
+
+        .badge-subasta {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .subasta-info {
+            padding: 1.5rem;
+        }
+
+        .subasta-info h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .subasta-desc {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .subasta-precio {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .precio-actual {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #27ae60;
+            transition: all 0.3s ease;
+        }
+
+        .moneda {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .subasta-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+
+        .subasta-tiempo {
+            background: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #856404;
+            font-weight: 500;
+        }
+
+        .subasta-ofertas {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .subasta-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .btn-puja {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-puja:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-ver-mas {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-ver-mas:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Hero section específico para subastas */
+        .hero-subastas {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-subastas h2 {
+            font-size: 2.5em;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-subastas p {
+            font-size: 1.2em;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .subastas-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat h3 {
+            font-size: 2em;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .stat p {
+            font-size: 0.9em;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* Filtros */
+        .filtros-subastas {
+            background: #f8f9fa;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .filtros-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-select, .search-input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+            min-width: 200px;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        /* Estados de precio */
+        .precio-normal { color: #27ae60; }
+        .precio-alto { color: #e67e22; font-weight: bold; }
+        .precio-maximo { 
+            color: #e74c3c; 
+            font-size: 1.2em; 
+            font-weight: bold; 
+        }
+
+        .subasta-finalizada {
+            opacity: 0.7;
+        }
+
+        .subasta-finalizada .badge-subasta {
+            background: #6c757d;
+            animation: none;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -14,7 +271,7 @@
             <nav class="nav">
                 <a href="index.html" class="nav-link">Inicio</a>
                 <a href="tienda.html" class="nav-link">Tienda</a>
-                <a href="subastas.html" class="nav-link">Subastas</a>
+                <a href="subastas.html" class="nav-link active">Subastas</a>
                 <a href="#" class="nav-link" id="auth-link">Mi Cuenta</a>
                 <a href="#" class="nav-link cart" id="cart-link">🛒 Carrito (<span id="cart-count">0</span>)</a>
             </nav>
@@ -65,26 +322,180 @@
     </section>
 
     <!-- Grid de Subastas -->
-<section class="subastas">
-    <div class="container">
-        <div class="subastas-grid" id="subastas-grid">
-            <!-- Las subastas se cargarán con JavaScript -->
+    <section class="subastas">
+        <div class="container">
+            <div class="subastas-grid" id="subastas-grid">
+                <!-- Producto Subasta 1 -->
+                <div class="producto-subasta" data-id="1">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/3498db/ffffff?text=Charizard+1ª+Ed" alt="Charizard 1ª Edición">
+                        <span class="badge-subasta">🔥 EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Charizard 1ª Edición</h3>
+                        <p class="subasta-desc">Carta rara de Pokémon TCG en estado gem mint. Una de las cartas más buscadas por coleccionistas.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">100.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">05:00</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">12</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(1)">💎 Pujar Ahora</button>
+                            <a href="/subasta/index.html?id=1" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto Subasta 2 -->
+                <div class="producto-subasta" data-id="2">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/e74c3c/ffffff?text=Black+Lotus" alt="Black Lotus">
+                        <span class="badge-subasta">🌟 EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Black Lotus</h3>
+                        <p class="subasta-desc">La carta más legendaria de Magic: The Gathering. Edición limitada alpha en perfecto estado.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">250.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">07:30</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">8</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(2)">💎 Pujar Ahora</button>
+                            <a href="/subasta/index.html?id=2" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto Subasta 3 -->
+                <div class="producto-subasta" data-id="3">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/f39c12/ffffff?text=Blue-Eyes" alt="Blue-Eyes White Dragon">
+                        <span class="badge-subasta">⚡ EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Blue-Eyes White Dragon</h3>
+                        <p class="subasta-desc">Carta icónica de Yu-Gi-Oh! Primera edición en español. Pieza de colección esencial.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">75.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">03:15</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">15</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(3)">💎 Pujar Ahora</button>
+                            <a href="producto-subasta.html?id=3" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto Subasta 4 -->
+                <div class="producto-subasta" data-id="4">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/9b59b6/ffffff?text=Dark+Magician" alt="Dark Magician">
+                        <span class="badge-subasta">🔮 EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Dark Magician</h3>
+                        <p class="subasta-desc">Carta clásica de Yu-Gi-Oh! en edición limitada. Perfecta para coleccionistas serios.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">60.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">06:45</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">9</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(4)">💎 Pujar Ahora</button>
+                            <a href="producto-subasta.html?id=4" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto Subasta 5 -->
+                <div class="producto-subasta" data-id="5">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/2ecc71/ffffff?text=Blastoise" alt="Blastoise">
+                        <span class="badge-subasta">💧 EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Blastoise 1ª Edición</h3>
+                        <p class="subasta-desc">Otra joya de Pokémon TCG. Primera edición en estado near mint. Oportunidad única.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">85.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">04:20</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">11</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(5)">💎 Pujar Ahora</button>
+                            <a href="/subasta/index.html?id=5" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto Subasta 6 -->
+                <div class="producto-subasta" data-id="6">
+                    <div class="subasta-imagen">
+                        <img src="https://placehold.co/300x400/e91e63/ffffff?text=Red-Eyes" alt="Red-Eyes Black Dragon">
+                        <span class="badge-subasta">🐉 EN VIVO</span>
+                    </div>
+                    <div class="subasta-info">
+                        <h3>Red-Eyes Black Dragon</h3>
+                        <p class="subasta-desc">Dragón legendario de Yu-Gi-Oh! Edición especial con foil holográfico. Pieza rara.</p>
+                        <div class="subasta-precio">
+                            <span class="precio-actual">95.00</span>
+                            <span class="moneda">MXN</span>
+                        </div>
+                        <div class="subasta-meta">
+                            <div class="subasta-tiempo">
+                                ⏰ <span class="tiempo-restante">08:10</span>
+                            </div>
+                            <div class="subasta-ofertas">
+                                👤 <span class="ofertas-count">7</span> ofertas
+                            </div>
+                        </div>
+                        <div class="subasta-actions">
+                            <button class="btn-puja" onclick="abrirModalPuja(6)">💎 Pujar Ahora</button>
+                            <a href="/subasta/index.html?id=6" class="btn-ver-mas">🔍 Ver Más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <!-- Loading y mensajes -->
-        <div id="subastas-loading" style="text-align: center; padding: 2rem; display: none;">
-            <div class="loading"></div>
-            <p style="margin-top: 1rem; color: #666;">Cargando subastas...</p>
-        </div>
-        
-        <div id="subastas-empty" style="text-align: center; padding: 3rem; display: none;">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">⚡</div>
-            <h3 style="color: #2c3e50; margin-bottom: 1rem;">No hay subastas disponibles</h3>
-            <p style="color: #666; margin-bottom: 2rem;">Vuelve pronto para descubrir nuevas oportunidades</p>
-            <button class="btn btn-primary" onclick="limpiarFiltrosSubastas()">Ver Todas las Subastas</button>
-        </div>
-    </div>
-</section>
+    </section>
+
     <!-- Modal de Puja -->
     <div id="puja-modal" class="modal">
         <div class="modal-content">
@@ -106,77 +517,233 @@
         </div>
     </div>
 
-    <!-- Modal de Login/Registro -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-auth">&times;</span>
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Iniciar Sesión</button>
-                <button class="auth-tab" data-tab="register">Registrarse</button>
-            </div>
-            
-            <div id="login-form" class="auth-form active">
-                <h3>Iniciar Sesión</h3>
-                <form class="login-form-auth">
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                </form>
-            </div>
-            
-            <div id="register-form" class="auth-form">
-                <h3>Crear Cuenta</h3>
-                <form class="register-form-auth">
-                    <input type="text" placeholder="Nombre completo" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Contraseña" required>
-                    <input type="password" placeholder="Confirmar contraseña" required>
-                    <button type="submit" class="btn btn-primary">Registrarse</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Perfil -->
-    <div id="profile-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-profile">&times;</span>
-            <h2>Mi Perfil</h2>
-            <div class="profile-info">
-                <div class="profile-header">
-                    <div class="profile-avatar">👤</div>
-                    <div class="profile-details">
-                        <h3 id="profile-name">Usuario</h3>
-                        <p id="profile-email">email@ejemplo.com</p>
-                    </div>
-                </div>
-                <div class="profile-stats">
-                    <div class="profile-stat">
-                        <span class="stat-number" id="pujas-realizadas">0</span>
-                        <span class="stat-label">Pujas Realizadas</span>
-                    </div>
-                    <div class="profile-stat">
-                        <span class="stat-number" id="compras-realizadas">0</span>
-                        <span class="stat-label">Compras</span>
-                    </div>
-                    <div class="profile-stat">
-                        <span class="stat-number" id="subastas-ganadas">0</span>
-                        <span class="stat-label">Subastas Ganadas</span>
-                    </div>
-                </div>
-                <div class="profile-actions">
-                    <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 TCG Collector's Haven. Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <script>
+// SISTEMA DE SUBASTAS SEGURO - CON DISEÑO ANTERIOR Y SIN BUCLES INFINITOS
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ Sistema de subastas inicializado - Diseño clásico');
+    
+    // 1. Configurar estadísticas estáticas
+    actualizarEstadisticas();
+    
+    // 2. Configurar botones de manera segura
+    configurarBotones();
+    
+    // 3. Configurar filtros
+    configurarFiltros();
+    
+    // 4. INICIAR SUBASTAS DE FORMA CONTROLADA
+    setTimeout(iniciarSubastasControladas, 1000);
+});
+
+function actualizarEstadisticas() {
+    document.getElementById('subastas-activas').textContent = '6';
+    document.getElementById('pujas-totales').textContent = '62';
+    document.getElementById('usuarios-activos').textContent = '243';
+}
+
+function configurarBotones() {
+    // Botones de puja
+    document.querySelectorAll('.btn-puja').forEach(boton => {
+        boton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productoId = this.closest('.producto-subasta').dataset.id;
+            abrirModalPuja(productoId);
+        });
+    });
+    
+    // Los botones "Ver Más" ya tienen su href configurado
+}
+
+function configurarFiltros() {
+    document.querySelectorAll('.filter-select, .search-input').forEach(elemento => {
+        elemento.addEventListener('change', function() {
+            console.log('Filtro aplicado:', this.value);
+            // Aquí puedes agregar la lógica de filtrado
+        });
+    });
+}
+
+function iniciarSubastasControladas() {
+    console.log('🚀 Iniciando sistema de subastas controlado...');
+    
+    let actualizacionesRealizadas = 0;
+    const MAX_ACTUALIZACIONES = 12; // Límite seguro
+    
+    const intervalo = setInterval(() => {
+        actualizacionesRealizadas++;
+        console.log(`📈 Actualización ${actualizacionesRealizadas} de ${MAX_ACTUALIZACIONES}`);
+        
+        let subastasActivas = false;
+        
+        // Actualizar cada producto de subasta
+        document.querySelectorAll('.producto-subasta').forEach(producto => {
+            const precioElement = producto.querySelector('.precio-actual');
+            const tiempoElement = producto.querySelector('.tiempo-restante');
+            const ofertasElement = producto.querySelector('.ofertas-count');
+            const botonPuja = producto.querySelector('.btn-puja');
+            const badge = producto.querySelector('.badge-subasta');
+            
+            if (!precioElement || precioElement.textContent === 'SUBASTA CERRADA') {
+                return;
+            }
+            
+            const precioActual = parseFloat(precioElement.textContent);
+            const productoId = producto.dataset.id;
+            
+            if (!isNaN(precioActual)) {
+                // Definir precio máximo por producto
+                const preciosMaximos = { 
+                    '1': 600, '2': 800, '3': 400, 
+                    '4': 350, '5': 500, '6': 450 
+                };
+                const precioMaximo = preciosMaximos[productoId] || 500;
+                
+                if (precioActual < precioMaximo) {
+                    subastasActivas = true;
+                    
+                    // Aumento controlado y realista
+                    const aumentoPorcentaje = precioActual > precioMaximo * 0.8 ? 1.02 : 1.04;
+                    const nuevoPrecio = precioActual * aumentoPorcentaje;
+                    precioElement.textContent = nuevoPrecio.toFixed(2);
+                    
+                    // Actualizar estilo del precio
+                    actualizarEstiloPrecio(precioElement, nuevoPrecio, precioMaximo);
+                    
+                    // Actualizar tiempo restante
+                    if (tiempoElement) {
+                        actualizarTiempo(tiempoElement);
+                    }
+                    
+                    // Ocasionalmente aumentar el contador de ofertas
+                    if (ofertasElement && Math.random() > 0.7) {
+                        const ofertasActuales = parseInt(ofertasElement.textContent);
+                        ofertasElement.textContent = ofertasActuales + 1;
+                    }
+                    
+                } else {
+                    // Finalizar subasta
+                    finalizarSubasta(producto, precioElement, botonPuja, badge);
+                }
+            }
+        });
+        
+        // VERIFICAR SI DEBEMOS DETENER EL SISTEMA
+        if (!subastasActivas || actualizacionesRealizadas >= MAX_ACTUALIZACIONES) {
+            clearInterval(intervalo);
+            console.log('✅ Sistema de subastas finalizado correctamente');
+            
+            if (!subastasActivas) {
+                mostrarMensajeFinal();
+            }
+        }
+        
+    }, 4000); // Actualizar cada 4 segundos
+}
+
+function actualizarEstiloPrecio(elemento, precioActual, precioMaximo) {
+    // Limpiar clases anteriores
+    elemento.classList.remove('precio-normal', 'precio-alto', 'precio-maximo');
+    
+    const porcentaje = (precioActual / precioMaximo) * 100;
+    
+    if (porcentaje < 50) {
+        elemento.classList.add('precio-normal');
+    } else if (porcentaje < 85) {
+        elemento.classList.add('precio-alto');
+    } else {
+        elemento.classList.add('precio-maximo');
+    }
+}
+
+function actualizarTiempo(tiempoElement) {
+    const texto = tiempoElement.textContent;
+    const [minutos, segundos] = texto.split(':').map(Number);
+    
+    let nuevosSegundos = segundos - 1;
+    let nuevosMinutos = minutos;
+    
+    if (nuevosSegundos < 0) {
+        nuevosSegundos = 59;
+        nuevosMinutos = minutos - 1;
+    }
+    
+    if (nuevosMinutos >= 0) {
+        tiempoElement.textContent = `${nuevosMinutos.toString().padStart(2, '0')}:${nuevosSegundos.toString().padStart(2, '0')}`;
+    }
+}
+
+function finalizarSubasta(producto, precioElement, botonPuja, badge) {
+    precioElement.textContent = 'SUBASTA CERRADA';
+    precioElement.classList.add('precio-maximo');
+    
+    if (botonPuja) {
+        botonPuja.disabled = true;
+        botonPuja.textContent = '🛑 Finalizada';
+        botonPuja.style.background = '#6c757d';
+        botonPuja.style.cursor = 'not-allowed';
+    }
+    
+    if (badge) {
+        badge.textContent = '✅ FINALIZADA';
+        badge.style.background = '#27ae60';
+        badge.style.animation = 'none';
+    }
+    
+    producto.classList.add('subasta-finalizada');
+}
+
+function mostrarMensajeFinal() {
+    const mensaje = document.createElement('div');
+    mensaje.style.cssText = `
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+        padding: 25px;
+        margin: 30px 0;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+    `;
+    mensaje.innerHTML = `
+        <h3 style="margin: 0 0 15px 0; font-size: 1.5em;">🎉 ¡Todas las subastas han finalizado!</h3>
+        <p style="margin: 0; opacity: 0.9; font-size: 1.1em;">Gracias por participar en nuestras subastas en vivo.</p>
+        <p style="margin: 10px 0 0 0; opacity: 0.8;">Vuelve pronto para descubrir nuevas oportunidades únicas.</p>
+    `;
+    
+    const grid = document.getElementById('subastas-grid');
+    if (grid) {
+        grid.parentNode.insertBefore(mensaje, grid.nextSibling);
+    }
+}
+
+function abrirModalPuja(productoId) {
+    const productos = {
+        1: { nombre: 'Charizard 1ª Edición', precio: '100.00' },
+        2: { nombre: 'Black Lotus', precio: '250.00' },
+        3: { nombre: 'Blue-Eyes White Dragon', precio: '75.00' },
+        4: { nombre: 'Dark Magician', precio: '60.00' },
+        5: { nombre: 'Blastoise 1ª Edición', precio: '85.00' },
+        6: { nombre: 'Red-Eyes Black Dragon', precio: '95.00' }
+    };
+    
+    const producto = productos[productoId];
+    if (producto) {
+        alert(`🎴 PUJA PARA: ${producto.nombre}\n💵 Precio actual: $${producto.precio} MXN\n\n💎 Esta es una demostración - el sistema completo de pujas estará disponible pronto`);
+    }
+}
+
+function limpiarFiltrosSubastas() {
+    document.getElementById('estado-subasta').value = 'todas';
+    document.getElementById('categoria-subasta').value = 'todas';
+    document.getElementById('search-subasta').value = '';
+    alert('🧹 Filtros limpiados correctamente');
+}
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
